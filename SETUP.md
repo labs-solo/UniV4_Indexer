@@ -62,13 +62,25 @@ Quick setup guide for the UniChain Swap-Fact pipeline.
 - The indexer will backfill from block 1000000 by default
 - Cron runs daily at 02:00 UTC for refresh and CSV export
 - CSV files are saved as `swap_facts_unichain_YYYYMMDD.csv`
+- Service ports:
+  - `8080`: Hasura GraphQL interface
+  - `9898`: Metrics endpoint (configurable via `METRICS_PORT`)
+  - `5432`: PostgreSQL database
 
 ## Troubleshooting
 
 - If no swaps appear, check RPC connectivity and pool addresses
 - If enrichment fails, verify price view and address labels
+- If port 9898 is in use, set `METRICS_PORT` in `.env` to a different port
 - Monitor logs with `docker compose logs <service>`
 - Check validation results to identify issues
+- For port conflicts:
+  ```bash
+  # Check for running indexer processes
+  pkill -f "envio dev"
+  # Or change metrics port in .env
+  echo "METRICS_PORT=9899" >> .env
+  ```
 
 ## Architecture
 

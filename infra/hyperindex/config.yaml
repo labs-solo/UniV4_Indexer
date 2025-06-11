@@ -13,7 +13,7 @@ networks:
 contracts:
   - name: UniswapV4PoolManager
     address: 
-      - "0x0000000000000000000000000000000000000000"  # Replace with actual PoolManager address
+      - "0x1f98400000000000000000000000000000000004"  # UniChain PoolManager address
     abi_file_path: ./abis/PoolManager.json
     handler: src/EventHandlers.ts
     events:
