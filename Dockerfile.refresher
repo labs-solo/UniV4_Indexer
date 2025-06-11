@@ -1,0 +1,36 @@
+FROM alpine:3.18
+
+# Install required packages
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    postgresql-client \
+    curl \
+    bash \
+    tzdata
+
+# Set timezone to UTC
+ENV TZ=UTC
+
+# Install Python packages
+RUN pip3 install --no-cache-dir \
+    pandas \
+    requests \
+    web3 \
+    psycopg2-binary
+
+# Create workdir
+WORKDIR /workdir
+
+# Copy scripts and make them executable
+COPY scripts/ /workdir/scripts/
+RUN chmod +x /workdir/scripts/*.sh
+
+# Create logs directory
+RUN mkdir -p /workdir/logs
+
+# Setup cron job for daily refresh at 02:00 UTC
+RUN echo "0 2 * * * /workdir/scripts/daily_refresh.sh >> /workdir/logs/daily_refresh.log 2>&1" > /etc/crontabs/root
+
+# Start cron daemon
+CMD ["crond", "-f", "-d", "8"] 

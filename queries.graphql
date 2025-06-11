@@ -1,0 +1,118 @@
+# GraphQL queries for UniChain Swap-Fact Pipeline
+
+# Query pool metadata
+query getPoolMetadata($poolId: String!) {
+  pool(id: $poolId) {
+    id
+    token0 {
+      address
+      symbol
+      name
+    }
+    token1 {
+      address
+      symbol
+      name
+    }
+    feeBps
+    totalSwapCount
+    totalVolumeUSD
+  }
+}
+
+# Query recent swaps for a specific pool
+query recentSwaps($poolId: String!, $limit: Int!) {
+  raw_unichain_swaps(
+    where: { pool_address: { _eq: $poolId } }
+    order_by: { block_time: desc }
+    limit: $limit
+  ) {
+    block_time
+    tx_hash
+    log_index
+    token0
+    token1
+    amount0
+    amount1
+    sender
+    origin
+  }
+}
+
+# Query swaps from both target pools
+query allSwapsBothPools {
+  raw_unichain_swaps(where: { pool_address: { _in: [
+    "0x410723c1949069324d0f6013dba28829c4a0562f7c81d0f7cb79ded668691e1f",
+    "0x51f9d63dda41107d6513047f7ed18133346ce4f3f4c4faf899151d8939b3496e"
+  ]}}) {
+    tx_hash
+    block_time
+    pool_address
+    amount0
+    amount1
+    sender
+  }
+}
+
+# Query swaps with gas and price data (from fact table)
+query enrichedSwaps($limit: Int!) {
+  labs_solo_pool_swap_fact_unichain(
+    order_by: { block_time: desc }
+    limit: $limit
+  ) {
+    block_time
+    tx_hash
+    log_index
+    pool_address
+    token0
+    token1
+    amount0
+    amount1
+    price0_usd
+    price1_usd
+    trader
+    is_contract
+    flow_source
+    hop_index
+    gas_used
+  }
+}
+
+# Query daily volume by pool
+query dailyVolume($date: date!) {
+  labs_solo_pool_swap_fact_unichain(
+    where: { block_time: { _gte: $date } }
+  ) {
+    pool_address
+    amount0
+    amount1
+    price0_usd
+    price1_usd
+  }
+}
+
+# Query top traders by volume
+query topTraders($limit: Int!) {
+  labs_solo_pool_swap_fact_unichain(
+    group_by: [trader, flow_source]
+    order_by: { sum: { amount0: desc } }
+    limit: $limit
+  ) {
+    trader
+    flow_source
+    sum {
+      amount0
+      amount1
+    }
+    count
+  }
+}
+
+# Query gas usage statistics
+query gasStats {
+  labs_solo_pool_swap_fact_unichain {
+    gas_used
+    hop_index
+    flow_source
+  }
+} 

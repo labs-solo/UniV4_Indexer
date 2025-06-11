@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - etl_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  hyperindex:
+    build: ./infra/hyperindex
+    env_file: env.template
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - etl_net
+    ports:
+      - "8080:8080"
+    volumes:
+      - hyperindex_cache:/app/cache
+    restart: unless-stopped
+
+  refresher:
+    build:
+      context: .
+      dockerfile: Dockerfile.refresher
+    env_file: env.template
+    volumes:
+      - .:/workdir
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - etl_net
+    restart: unless-stopped
+
+networks:
+  etl_net:
+    driver: bridge
+
+volumes:
+  pgdata:
+  hyperindex_cache: 

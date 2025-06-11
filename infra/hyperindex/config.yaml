@@ -1,0 +1,44 @@
+# Envio Uniswap v4 Indexer Configuration for UniChain
+name: unichain-swaps
+
+# Network configuration
+networks:
+  - id: 130  # UniChain chain ID
+    rpc_config:
+      url: ${RPC_URL}
+      ws_url: ${RPC_WS}
+    start_block: 1000000  # Adjust based on when pools were created
+    
+# Contracts to index
+contracts:
+  - name: UniswapV4PoolManager
+    address: 
+      - "0x0000000000000000000000000000000000000000"  # Replace with actual PoolManager address
+    abi_file_path: ./abis/PoolManager.json
+    handler: src/EventHandlers.ts
+    events:
+      - event: "Swap"
+      - event: "Initialize"
+      - event: "ModifyLiquidity"
+
+# Database configuration  
+database:
+  postgres:
+    host: ${DB_HOST:-postgres}
+    port: ${DB_PORT:-5432}
+    user: ${DB_USER:-postgres}
+    password: ${POSTGRES_PASSWORD}
+    database: ${DB_NAME:-postgres}
+
+# Hasura configuration
+hasura:
+  endpoint: "http://localhost:8080"
+  admin_secret: ${HASURA_ADMIN_SECRET:-""}
+
+# Logging
+rollbar_api_key: ${ROLLBAR_API_KEY:-""}
+
+# Target pools to index specifically
+target_pools:
+  - "0x410723c1949069324d0f6013dba28829c4a0562f7c81d0f7cb79ded668691e1f"  # Hooked pool
+  - "0x51f9d63dda41107d6513047f7ed18133346ce4f3f4c4faf899151d8939b3496e"  # Static pool 
