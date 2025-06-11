@@ -21,8 +21,12 @@ COPY config.yaml ./config.yaml
 # Expose Hasura port
 EXPOSE 8080
 
-# Create cache directory
-RUN mkdir -p /app/cache
+# Create cache directory and set permissions
+RUN mkdir -p /app/cache && \
+    chown -R node:node /app
+
+# Switch to non-root user
+USER node
 
 # Start the indexer in dev mode
 CMD ["pnpm", "envio", "dev"] 

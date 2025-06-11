@@ -1,0 +1,173 @@
+
+
+type Token {
+  # Token contract address
+  id: ID!
+  # Token symbol
+  symbol: String!
+  # Token name
+  name: String!
+  # Token decimals
+  decimals: Int!
+  # Total supply
+  totalSupply: BigInt!
+  # Pools where this token is involved
+  pools: [Pool!]! @derivedFrom(field: "token0")
+  poolsAsToken1: [Pool!]! @derivedFrom(field: "token1")
+}
+
+type Pool {
+  # Pool ID (computed from token addresses and fee)
+  id: ID!
+  # Token 0 address
+  token0: Token!
+  # Token 1 address  
+  token1: Token!
+  # Fee tier
+  fee: Int!
+  # Pool manager address
+  poolManager: String!
+  # Current tick
+  tick: Int!
+  # Current sqrt price
+  sqrtPriceX96: BigInt!
+  # Total liquidity
+  liquidity: BigInt!
+  # Pool creation timestamp
+  createdAt: BigInt!
+  # Pool creation block number
+  createdAtBlock: BigInt!
+  # Total volume in USD
+  volumeUSD: BigDecimal!
+  # Total value locked in USD
+  tvlUSD: BigDecimal!
+  # Fee growth global 0
+  feeGrowthGlobal0X128: BigInt!
+  # Fee growth global 1
+  feeGrowthGlobal1X128: BigInt!
+  # All swaps in this pool
+  swaps: [Swap!]! @derivedFrom(field: "pool")
+  # All positions in this pool
+  positions: [Position!]! @derivedFrom(field: "pool")
+}
+
+type Position {
+  # Position ID (owner + pool + tickLower + tickUpper)
+  id: ID!
+  # Position owner
+  owner: User!
+  # Pool this position belongs to
+  pool: Pool!
+  # Lower tick of the position
+  tickLower: Int!
+  # Upper tick of the position
+  tickUpper: Int!
+  # Current liquidity
+  liquidity: BigInt!
+  # Deposited token0 amount
+  depositedToken0: BigInt!
+  # Deposited token1 amount
+  deposited1: BigInt!
+  # Withdrawn token0 amount
+  withdrawnToken0: BigInt!
+  # Withdrawn token1 amount
+  withdrawnToken1: BigInt!
+  # Collected fees token0
+  collectedFeesToken0: BigInt!
+  # Collected fees token1
+  collectedFeesToken1: BigInt!
+  # Position creation timestamp
+  createdAt: BigInt!
+  # Position creation block
+  createdAtBlock: BigInt!
+  # Last update timestamp
+  updatedAt: BigInt!
+  # Last update block
+  updatedAtBlock: BigInt!
+}
+
+type User {
+  # User wallet address
+  id: ID!
+  # Total number of positions
+  positionCount: Int!
+  # Total number of swaps
+  swapCount: Int!
+  # All user positions
+  positions: [Position!]! @derivedFrom(field: "owner")
+  # All user swaps
+  swaps: [Swap!]! @derivedFrom(field: "origin")
+}
+
+type Swap {
+  # Transaction hash + log index
+  id: ID!
+  # Transaction hash
+  transaction: String!
+  # Pool where swap occurred
+  pool: Pool!
+  # Swap originator
+  origin: User!
+  # Recipient of the swap
+  recipient: String!
+  # Amount of token0
+  amount0: BigInt!
+  # Amount of token1
+  amount1: BigInt!
+  # Amount in USD
+  amountUSD: BigDecimal!
+  # Tick after swap
+  tick: Int!
+  # Sqrt price after swap
+  sqrtPriceX96: BigInt!
+  # Liquidity after swap
+  liquidity: BigInt!
+  # Gas used
+  gasUsed: BigInt!
+  # Gas price
+  gasPrice: BigInt!
+  # Block timestamp
+  timestamp: BigInt!
+  # Block number
+  blockNumber: BigInt!
+  # Log index within transaction
+  logIndex: Int!
+}
+
+type PoolDayData {
+  # Pool address + day timestamp
+  id: ID!
+  # Pool reference
+  pool: Pool!
+  # Day start timestamp
+  date: Int!
+  # Daily volume in USD
+  volumeUSD: BigDecimal!
+  # TVL at end of day
+  tvlUSD: BigDecimal!
+  # Number of swaps
+  swapCount: Int!
+  # High price of the day
+  high: BigDecimal!
+  # Low price of the day
+  low: BigDecimal!
+  # Opening price
+  openPrice: BigDecimal!
+  # Closing price
+  closePrice: BigDecimal!
+}
+
+type GlobalStats {
+  # Singleton entity with ID "1"
+  id: ID!
+  # Total pools created
+  poolCount: Int!
+  # Total transactions
+  transactionCount: Int!
+  # Total volume in USD
+  totalVolumeUSD: BigDecimal!
+  # Total value locked in USD
+  totalTVL: BigDecimal!
+  # Last update timestamp
+  updatedAt: BigInt!
+}

@@ -1,0 +1,59 @@
+time="2025-06-11T13:12:29-04:00" level=warning msg="/Users/rbgross/Github/UniV4_Indexer/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Container univ4_indexer-postgres-1  Running
+ Container univ4_indexer-hyperindex-1  Created
+Attaching to hyperindex-1
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0
+hyperindex-1  | 
+hyperindex-1  | > uniswap-v4-indexer@0.1.0 dev /app
+hyperindex-1  | > envio dev
+hyperindex-1  | 
+[Khyperindex-1 exited with code 0

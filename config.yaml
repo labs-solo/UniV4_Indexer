@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: uniswap-v4-indexer
+description: Uniswap V4 indexer tracking pools, swaps, and liquidity positions
+networks:
+  - id: 130 # Unichain Mainnet
+    start_block: 18000000
+    rpc_config:
+      url: "https://mainnet.unichain.org"
+    contracts:
+      - name: PoolManager
+        address: "0x1f98400000000000000000000000000000000004" # Uniswap V4 PoolManager on Unichain Mainnet
+        handler: src/EventHandlers.ts
+        events:
+          - event: "Initialize(bytes32 indexed id, address indexed currency0, address indexed currency1, uint24 fee, int24 tickSpacing, bytes32 hooks)"
+          - event: "Swap(bytes32 indexed id, address indexed sender, int128 amount0, int128 amount1, uint160 sqrtPriceX96, uint128 liquidity, int24 tick, uint24 fee)"
+          - event: "ModifyLiquidity(bytes32 indexed id, address indexed sender, int24 tickLower, int24 tickUpper, int256 liquidityDelta, bytes32 salt)"
+          - event: "ProtocolFeeUpdated(bytes32 indexed id, uint24 protocolFee)"
+      - name: PositionManager
+        address: "0x4529a01c7a0410167c5740c487a8de60232617bf" # Uniswap V4 PositionManager on Unichain Mainnet
+        handler: src/EventHandlers.ts
+        events:
+          - event: "IncreaseLiquidity(uint256 indexed tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)"
+          - event: "DecreaseLiquidity(uint256 indexed tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)"
+          - event: "Collect(uint256 indexed tokenId, address recipient, uint256 amount0, uint256 amount1)"
+      - name: ERC20
+        address: 
+          - "0x4200000000000000000000000000000000000006" # WETH on Unichain Mainnet
+          - "0x078D782b760474a361dDA0AF3839290b0EF57AD6" # USDC on Unichain Mainnet
+          - "0x8f187aA05619a017077f5308904739877ce9eA21" # UNI on Unichain Mainnet
+          - "0x9151434b16b9763660705744891fA906F660EcC5" # USDT on Unichain Mainnet
+          - "0x7E10036Acc4B56d4dFCa3b77810356CE52313F9C" # USDS on Unichain Mainnet
+          - "0xc02fE7317D4eb8753a02c35fe019786854A92001" # wstETH on Unichain Mainnet
+          - "0x0555E30da8f98308EdB960aa94C0Db47230d2B9c" # wBTC OFT on Unichain Mainnet
+        handler: src/EventHandlers.ts
+        events:
+          - event: "Transfer(address indexed from, address indexed to, uint256 value)"
+          - event: "Approval(address indexed owner, address indexed spender, uint256 value)"
+# Unordered multichain mode allows you to index events from multiple chains
+# in realtime but doesn't guarantee ordering between chains
+# https://docs.envio.dev/docs/HyperIndex/multichain-indexing#unordered-multichain-mode
+unordered_multichain_mode: true
