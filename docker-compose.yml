@@ -19,7 +19,7 @@ services:
 
   hyperindex:
     build: ./infra/hyperindex
-    env_file: env.template
+    env_file: .env
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,7 +35,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.refresher
-    env_file: env.template
+    env_file: .env
     volumes:
       - .:/workdir
     depends_on:
