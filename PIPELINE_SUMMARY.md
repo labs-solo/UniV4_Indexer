@@ -51,7 +51,10 @@ UniV4_Indexer/
 - Targets two specific WBTC/ETH pools:
   - Hooked pool: `0x410723c1949069324d0f6013dba28829c4a0562f7c81d0f7cb79ded668691e1f`
   - Static pool: `0x51f9d63dda41107d6513047f7ed18133346ce4f3f4c4faf899151d8939b3496e`
-- Provides GraphQL API via Hasura on port 8080
+- Service Ports:
+  - GraphQL API via Hasura on port 8080
+  - Metrics endpoint on port 9898 (configurable)
+  - PostgreSQL database on port 5432
 
 ### 3. **Refresher Service (ETL)**
 - Daily cron job at 02:00 UTC
@@ -89,8 +92,11 @@ UniV4_Indexer/
 - Log management
 - Container orchestration
 - Restart policies
+- Configurable service ports
+- Port conflict resolution
+- Process management utilities
 
-## 📊 Output Schema
+## �� Output Schema
 
 The final CSV (`swap_facts_unichain.csv`) includes:
 
@@ -114,7 +120,9 @@ The final CSV (`swap_facts_unichain.csv`) includes:
 1. **Configure Environment**:
    ```bash
    cp env.template .env
-   # Edit .env with real RPC URLs and API keys
+   # Edit .env with:
+   # - RPC URLs and API keys
+   # - Optional: METRICS_PORT if 9898 is in use
    ```
 
 2. **Start Pipeline**:
